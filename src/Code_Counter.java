@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
@@ -9,20 +10,23 @@ public class Code_Counter {
 
     public static void main(String[] args) {
         // 指定要统计代码行数的文件夹路径
-        Scanner sc = new Scanner(System.in);
-        System.out.print("请输入要统计代码量的文件：");
-        String fileName = sc.nextLine();
-        File folder = new File(fileName); // 替换为你的文件夹路径
-        // 调用countLines方法统计各文件类型的行数和个数
-        Map<String, FileStats> stats = countLines(folder);
-        // 输出每种文件类型的个数和行数
-        for (Map.Entry<String, FileStats> entry : stats.entrySet()) {
-            System.out.println(entry.getKey() +
-                    "： 文件个数 = " + entry.getValue().count +", 总行数 = " + entry.getValue().totalLines +
-                    ", 单行注释 = " + entry.getValue().singleLineComments +
-                    ", 多行注释 = " + entry.getValue().multiLineComments +
-                    ", 空行 = "+ entry.getValue().emptyLines +
-                    ", 行数 = " + entry.getValue().lines);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("请选择要统计的文件夹");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int userChoose = chooser.showOpenDialog(null);
+        if (userChoose == JFileChooser.APPROVE_OPTION) {
+            File folder = chooser.getSelectedFile();
+            // 调用countLines方法统计各文件类型的行数和个数
+            Map<String, FileStats> stats = countLines(folder);
+            // 输出每种文件类型的个数和行数
+            for (Map.Entry<String, FileStats> entry : stats.entrySet()) {
+                System.out.println(entry.getKey() +
+                        "： 文件个数 = " + entry.getValue().count +", 总行数 = " + entry.getValue().totalLines +
+                        ", 单行注释 = " + entry.getValue().singleLineComments +
+                        ", 多行注释 = " + entry.getValue().multiLineComments +
+                        ", 空行 = "+ entry.getValue().emptyLines +
+                        ", 行数 = " + entry.getValue().lines);
+            }
         }
     }
 
